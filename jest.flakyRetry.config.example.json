@@ -1,0 +1,31 @@
+[
+  {
+    "testFilePath": "<The relative path to the test file>",
+    "fullName": "<The test name, combination of describe+it descriptions; All tests will match for this file if omitted>",
+    "failureMessages": [
+      "<An expected failure message, can be a prefix of the actual error output>",
+      "<There can be multiple entries, but at least one entry>",
+      "<If failureMessages property is omitted, the test will be retried for all errors>"
+    ]
+  },
+  {
+    "testFilePath": "relative/path/to/some.test.js",
+    "fullName": "this.is.an.example.test.which should do something",
+    "failureMessages": [
+      "Error: A flaky error that occurs in this specific test"
+    ]
+  },
+  {
+    "testFilePath": "relative/path/to/some.test.js",
+    "fullName": "this.is.an.example.test.which should be very flaky - catch all failure messages for this test"
+  },
+  {
+    "testFilePath": "relative/path/to/wholeFileIsFlakyWithSpecificError.test.js",
+    "failureMessages": [
+      "Error: A flaky error that occurs for all tests in this file"
+    ]
+  },
+  {
+    "testFilePath": "relative/path/to/wholeFileIsFlakyWithArbitraryErrors.test.js"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "jest-flaky-retry",
+  "version": "0.0.1",
+  "description": "Jest reporter that retries known flaky tests and produces junit results",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Safety io - Cloud & Data Platform Team",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.5.1",
+    "jest-junit": "^13.0.0"
+  }
+}
