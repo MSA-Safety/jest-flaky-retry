@@ -4,12 +4,20 @@
   "description": "Jest reporter that retries known flaky tests and produces junit results",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:unit": "jest --coverage --config jest.unit.config.js",
+    "lint": "eslint ."
   },
   "author": "Safety io - Cloud Platform Team",
   "license": "ISC",
   "dependencies": {
-    "jest": "^27.5.1",
-    "jest-junit": "^13.0.0"
+    "jest": "^29.3.1",
+    "jest-junit": "^15.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.29.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.7",
+    "eslint-plugin-jsdoc": "^39.6.4"
   }
 }
