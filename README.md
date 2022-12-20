@@ -41,18 +41,40 @@ Add this package to your `jest.config.js`:
 ## Configuration Options
 **`testFilePath`** (string)
 - Relative path to test file
+- If omitted, all test files will match
 
 **`fullName`** (string)
 - The test name, combination of describe+it descriptions
 - If omitted, all tests will match for this file
 
-**`failureMessages`** (array[string])
+**`failureMessages`** (array[string|regex])
 - An expected failure message
-- Can be prefix of the actual error output
+- Can be a RegEx of the actual error output
 - Must have at least 1 entry
 - If omitted, the test will be retried for all errors
 
-Please see example configurations in `jest.flakyRetry.config.example.json`.
+## Example Configuration
+```json
+[
+    {
+        "testFilePath": "tests/integration/service.feature1.int.test.js"
+    },
+    {
+        "testFilePath": "tests/integration/service.feature2.int.test.js",
+        "failureMessages": [
+            "expected .*, got 503 \"Service Unavailable\""
+        ]
+    },
+    {
+        "testFilePath": "tests/integration/service.feature3.int.test.js",
+        "fullName": "feature3 should not be flaky, but somehow is",
+        "failureMessages": [
+            "Error: A flaky test that shall be retried if it occurs in this test"
+        ]
+    }
+]
+```
+Please see additional example configurations in `jest.flakyRetry.config.example.json`.
 
 # License
 

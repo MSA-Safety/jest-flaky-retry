@@ -15,9 +15,11 @@ describe('jestFlakyRetryReporter', () => {
 
   beforeEach(() => {
     jest.isolateModules(() => {
-      ({ runCLI } = require('jest')); // eslint-disable-line global-require, jest/no-jest-import
+      ({ runCLI } = require('jest')); // eslint-disable-line global-require
       jestJunit = require('jest-junit'); // eslint-disable-line global-require
-      ({ readFileSync, renameSync, existsSync, mkdirSync } = require('fs')); // eslint-disable-line global-require
+      ({
+        readFileSync, renameSync, existsSync, mkdirSync,
+      } = require('fs')); // eslint-disable-line global-require
       ({ isKnownToBeFlaky, mergeResults } = require('./helpers')); // eslint-disable-line global-require
       jest.mock('jest');
       jest.mock('jest-junit');
@@ -39,7 +41,7 @@ describe('jestFlakyRetryReporter', () => {
       expect(instance.options).toStrictEqual(options);
       expect(instance.retryTestCases).toStrictEqual([]);
       expect(instance.retryTestSuites).toStrictEqual([]);
-      expect(instance.shouldFail).toStrictEqual(false);
+      expect(instance.shouldFail).toBe(false);
     });
   });
 
@@ -174,7 +176,7 @@ describe('jestFlakyRetryReporter', () => {
         'junit.xml',
         `${instance.options.junitOutputDirectory}/junit.xml`,
       );
-      expect(results.success).toStrictEqual(true);
+      expect(results.success).toBe(true);
       expect(instance.shouldFail).toStrictEqual(!results.success);
     });
 
@@ -197,7 +199,7 @@ describe('jestFlakyRetryReporter', () => {
         'junit.xml',
         `${instance.options.junitOutputDirectory}/junit.xml`,
       );
-      expect(results.success).toStrictEqual(false);
+      expect(results.success).toBe(false);
       expect(instance.shouldFail).toStrictEqual(!results.success);
     });
 
