@@ -1,5 +1,10 @@
 <h1 align="center" style="border-bottom: none;">jest-flaky-retry</h1>
 <h3 align="center">Extension for <a href="https://facebook.github.io/jest">Jest</a> to retry and log flaky tests.</h3>
+<p align="center">
+  <a href="https://github.com/MSA-Safety/jest-flaky-retry/actions?query=workflow%3ATest+branch%3Amain">
+    <img alt="Build states" src="https://github.com/MSA-Safety/jest-flaky-retry/workflows/Test/badge.svg">
+  </a>
+</p>
 
 # Installation & Configuration
 
