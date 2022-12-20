@@ -4,6 +4,9 @@
   <a href="https://github.com/MSA-Safety/jest-flaky-retry/actions?query=workflow%3ATest+branch%3Amain">
     <img alt="Build states" src="https://github.com/MSA-Safety/jest-flaky-retry/workflows/Test/badge.svg">
   </a>
+  <a href="#badge">
+    <img alt="semantic-release: angular" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release">
+  </a>
 </p>
 
 # Installation & Configuration
