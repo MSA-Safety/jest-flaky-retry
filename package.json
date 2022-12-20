@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Safety io - Cloud & Data Platform Team",
+  "author": "Safety io - Cloud Platform Team",
   "license": "ISC",
   "dependencies": {
     "jest": "^27.5.1",
