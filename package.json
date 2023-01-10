@@ -1,15 +1,43 @@
 {
   "name": "jest-flaky-retry",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "Jest reporter that retries known flaky tests and produces junit results",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:unit": "jest --coverage --config jest.unit.config.js",
+    "lint": "eslint .",
+    "semantic-release": "semantic-release --branches main"
   },
-  "author": "Safety io - Cloud & Data Platform Team",
+  "author": "Safety io - Cloud Platform Team",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MSA-Safety/jest-flaky-retry.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MSA-Safety/jest-flaky-retry/issues"
+  },
+  "homepage": "https://github.com/MSA-Safety/jest-flaky-retry#readme",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "repositoryUrl": "git+ssh://git@github.com/MSA-Safety/jest-flaky-retry.git",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator"
+    ]
+  },
   "dependencies": {
-    "jest": "^27.5.1",
-    "jest-junit": "^13.0.0"
+    "jest": "^29.3.1",
+    "jest-junit": "^15.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.29.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.7",
+    "eslint-plugin-jsdoc": "^39.6.4",
+    "semantic-release": "^19.0.5"
   }
 }

@@ -1,9 +1,10 @@
 'use strict';
 
-// eslint-disable-next-line jest/no-jest-import
 const myJest = require('jest');
 const jestJunit = require('jest-junit');
-const { readFileSync, renameSync, existsSync, mkdirSync } = require('fs');
+const {
+  readFileSync, renameSync, existsSync, mkdirSync,
+} = require('fs');
 const { isKnownToBeFlaky, mergeResults } = require('./helpers');
 
 /**
@@ -47,9 +48,8 @@ class JestFlakyRetryReporter {
       process.cwd().length + 1,
     );
     const retryTestCases = testSuiteResult.testResults.filter(
-      (testCaseResult) =>
-        testCaseResult.status === 'failed' &&
-        isKnownToBeFlaky(
+      (testCaseResult) => testCaseResult.status === 'failed'
+        && isKnownToBeFlaky(
           this.knownFlakyTestCases,
           relativeTestFilePath,
           testCaseResult,

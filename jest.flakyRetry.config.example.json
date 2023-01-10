@@ -1,9 +1,9 @@
 [
   {
-    "testFilePath": "<The relative path to the test file>",
+    "testFilePath": "<The relative path to the test file; All test files will match for this if omitted>",
     "fullName": "<The test name, combination of describe+it descriptions; All tests will match for this file if omitted>",
     "failureMessages": [
-      "<An expected failure message, can be a prefix of the actual error output>",
+      "<An expected failure message, can be a RegEx of the actual error output>",
       "<There can be multiple entries, but at least one entry>",
       "<If failureMessages property is omitted, the test will be retried for all errors>"
     ]
@@ -13,6 +13,11 @@
     "fullName": "this.is.an.example.test.which should do something",
     "failureMessages": [
       "Error: A flaky error that occurs in this specific test"
+    ]
+  },
+  {
+    "failureMessages": [
+      "regex to catch multiple .* errors"
     ]
   },
   {

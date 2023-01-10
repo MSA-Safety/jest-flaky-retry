@@ -1,14 +1,17 @@
 'use strict';
 
 /**
- * Check if name of test file is exactly matching.
+ * Check if name of test file is exactly matching or not defined.
  *
  * @param {object} knownFlakyTestCase - The known flaky test case.
  * @param {string} relativeTestFilePath - The relative path of the test file.
  * @returns {boolean} Whether the test file path is matching.
  */
 function isMatchingTestFilePath(knownFlakyTestCase, relativeTestFilePath) {
-  return relativeTestFilePath === knownFlakyTestCase.testFilePath;
+  return (
+    !knownFlakyTestCase.testFilePath
+    || relativeTestFilePath === knownFlakyTestCase.testFilePath
+  );
 }
 
 /**
@@ -21,8 +24,8 @@ function isMatchingTestFilePath(knownFlakyTestCase, relativeTestFilePath) {
  */
 function isMatchingFullName(knownFlakyTestCase, testCaseResult) {
   return (
-    !knownFlakyTestCase.fullName ||
-    knownFlakyTestCase.fullName === testCaseResult.fullName
+    !knownFlakyTestCase.fullName
+    || knownFlakyTestCase.fullName === testCaseResult.fullName
   );
 }
 
@@ -40,10 +43,13 @@ function isMatchingFullName(knownFlakyTestCase, testCaseResult) {
  */
 function isMatchingFailureMessages(knownFlakyTestCase, testCaseResult) {
   return (
-    !knownFlakyTestCase.failureMessages ||
-    knownFlakyTestCase.failureMessages.some((knownFailureMsg) =>
-      testCaseResult.failureMessages.some((testCaseResultFailureMsg) =>
-        testCaseResultFailureMsg.startsWith(knownFailureMsg),
+    !knownFlakyTestCase.failureMessages
+    || knownFlakyTestCase.failureMessages.some(
+      (knownFailureMsg) => testCaseResult.failureMessages.some(
+        (testCaseResultFailureMsg) => {
+          const regex = new RegExp(knownFailureMsg);
+          return regex.test(testCaseResultFailureMsg);
+        },
       ),
     )
   );
@@ -63,10 +69,9 @@ function isKnownToBeFlaky(
   testCaseResult,
 ) {
   return knownFlakyTestCases.some(
-    (knownFlakyTestCase) =>
-      isMatchingTestFilePath(knownFlakyTestCase, relativeTestFilePath) &&
-      isMatchingFullName(knownFlakyTestCase, testCaseResult) &&
-      isMatchingFailureMessages(knownFlakyTestCase, testCaseResult),
+    (knownFlakyTestCase) => isMatchingTestFilePath(knownFlakyTestCase, relativeTestFilePath)
+      && isMatchingFullName(knownFlakyTestCase, testCaseResult)
+      && isMatchingFailureMessages(knownFlakyTestCase, testCaseResult),
   );
 }
 
@@ -96,23 +101,23 @@ function mergeResults(results, newResults) {
 
       // Merge new test case results
       if (newTestSuiteResult) {
-        mergedTestSuiteResult.testResults =
-          mergedTestSuiteResult.testResults.map((testCaseResult) => {
-            // Check if there is a new test case result for this test case
+        mergedTestSuiteResult.testResults = mergedTestSuiteResult.testResults.map(
+          (testCaseResult) => {
+          // Check if there is a new test case result for this test case
             const newTestCaseResult = newTestSuiteResult.testResults.find(
-              (entry) =>
-                entry.fullName === testCaseResult.fullName &&
-                entry.status === 'passed',
+              (entry) => entry.fullName === testCaseResult.fullName
+                && entry.status === 'passed',
             );
 
             // Overwrite test case results if rerun performed & successful
             return newTestCaseResult || testCaseResult;
-          });
+          },
+        );
 
-        mergedTestSuiteResult.numPassingTests +=
-          newTestSuiteResult.numPassingTests;
-        mergedTestSuiteResult.numFailingTests -=
-          newTestSuiteResult.numPassingTests;
+        mergedTestSuiteResult.numPassingTests
+          += newTestSuiteResult.numPassingTests;
+        mergedTestSuiteResult.numFailingTests
+          -= newTestSuiteResult.numPassingTests;
       }
 
       return mergedTestSuiteResult;

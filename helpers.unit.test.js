@@ -15,7 +15,7 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(false);
+      expect(result).toBe(false);
     });
 
     it('should return false if no test suite match found', () => {
@@ -34,7 +34,7 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(false);
+      expect(result).toBe(false);
     });
 
     it('should return false if no full name match found', () => {
@@ -55,7 +55,7 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(false);
+      expect(result).toBe(false);
     });
 
     it('should return false if no failure message match found', () => {
@@ -78,7 +78,7 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(false);
+      expect(result).toBe(false);
     });
 
     it('should return true if no full name configured', () => {
@@ -99,7 +99,7 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(true);
+      expect(result).toBe(true);
     });
 
     it('should return true if no failure message configured', () => {
@@ -121,7 +121,28 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(true);
+      expect(result).toBe(true);
+    });
+
+    it('should return true if no test suite configured', () => {
+      const knownFlakyTestCases = [
+        {
+          failureMessages: ['This shall be caught'],
+        },
+      ];
+      const { testFilePath } = knownFlakyTestCases[0];
+      const testCaseResult = {
+        fullName: knownFlakyTestCases[0].fullName,
+        failureMessages: ['This shall be caught'],
+      };
+
+      const result = isKnownToBeFlaky(
+        knownFlakyTestCases,
+        testFilePath,
+        testCaseResult,
+      );
+
+      expect(result).toBe(true);
     });
 
     it('should return true if failure message present', () => {
@@ -144,7 +165,55 @@ describe('helpers', () => {
         testCaseResult,
       );
 
-      expect(result).toStrictEqual(true);
+      expect(result).toBe(true);
+    });
+
+    it('should return true if failure regex matches', () => {
+      const knownFlakyTestCases = [
+        {
+          testFilePath: 'super/flaky.test.js',
+          fullName: 'super.flaky should do everything right',
+          failureMessages: ['This .* caught'],
+        },
+      ];
+      const { testFilePath } = knownFlakyTestCases[0];
+      const testCaseResult = {
+        fullName: knownFlakyTestCases[0].fullName,
+        failureMessages: ['This weirdly specific fake error shall be caught'],
+      };
+
+      const result = isKnownToBeFlaky(
+        knownFlakyTestCases,
+        testFilePath,
+        testCaseResult,
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false if failure regex does not match', () => {
+      const knownFlakyTestCases = [
+        {
+          testFilePath: 'super/flaky.test.js',
+          fullName: 'super.flaky should do everything right',
+          failureMessages: ['This .* really be caught'],
+        },
+      ];
+      const { testFilePath } = knownFlakyTestCases[0];
+      const testCaseResult = {
+        fullName: knownFlakyTestCases[0].fullName,
+        failureMessages: [
+          'This weirdly specific fake error shall not be caught',
+        ],
+      };
+
+      const result = isKnownToBeFlaky(
+        knownFlakyTestCases,
+        testFilePath,
+        testCaseResult,
+      );
+
+      expect(result).toBe(false);
     });
   });
 
