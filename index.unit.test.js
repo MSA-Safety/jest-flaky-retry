@@ -1,5 +1,7 @@
 'use strict';
 
+const { execSync } = require('child_process');
+
 describe('jestFlakyRetryReporter', () => {
   const localPath = process.cwd();
 
@@ -277,6 +279,31 @@ describe('jestFlakyRetryReporter', () => {
       expect(instance.getLastError()).toStrictEqual(
         new Error('JestFlakyRetryReporter reported an error'),
       );
+    });
+  });
+
+  describe('integration', () => {
+    it('should return with an error but merged junit report', () => {
+      let caughtError;
+
+      try {
+        execSync('cd demo && npm run test:unit');
+      } catch (error) {
+        caughtError = error;
+      }
+
+      expect(caughtError).toBeDefined();
+
+      const { status } = caughtError;
+      const stdout = caughtError.stdout.toString();
+      const stderr = caughtError.stderr.toString();
+
+      expect(status).toBe(1);
+      expect(stdout).toContain('Loading list of known flaky tests from jest.unit.flakyRetry.json');
+      expect(stdout).toContain('[ { failureMessages: [ \'Random Flaky Error\' ] } ]');
+      expect(stdout).toContain('Retrying test cases:  [ \'demo should fail on first test run and succeed on subsequent run\' ]');
+      expect(stderr).toContain('1 failed, 1 total');
+      expect(stderr).toContain('1 passed, 1 total');
     });
   });
 });
