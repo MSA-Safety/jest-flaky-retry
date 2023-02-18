@@ -41,6 +41,10 @@ Add this package to your `jest.config.js`:
 ]
 ```
 
+## Jest Return Code Behavior
+After successfully retrying a configured flaky test, Jest will return with a
+non-zero exit code. However, the junit report shows no failures.
+
 ## Configuration Options
 **`testFilePath`** (string)
 - Relative path to test file
@@ -78,6 +82,75 @@ Add this package to your `jest.config.js`:
 ]
 ```
 Please see additional example configurations in `jest.flakyRetry.config.example.json`.
+
+# Demo
+Please have a look at the `demo` folder.
+
+The node demo application shows a basic configuration of jest-flaky-retry. The output below shows the 
+test execution:
+- The first run of the test failed.
+- Due to the thrown error being configured in the jest-flaky-retry configuration file, jest-flaky-retry performed retry attempt.
+- The successful retry results in a failure-free junit output.
+- Jest returns exit code 1, due to failed test runs.
+
+Please note: this is not intended to represent a perfect example where this package might be helpful. More 
+appropriate usages might be e.g. network flakiness in integration and e2e tests.
+
+```shell
+$ cd demo
+$ npm run test:unit # failure-free junit output; jest will return with exit code 1 nonetheless
+
+  > jest-flaky-retry-demo@0.0.1 test:unit
+  > jest --config jest.unit.config.js
+
+  Determining test suites to run...Loading list of known flaky tests from jest.unit.flakyRetry.json
+  [ { failureMessages: [ 'Random Flaky Error' ] } ]
+  FAIL  ./demo.unit.test.js
+    demo
+      ✕ should fail on first test run and succeed on subsequent run (1 ms)
+
+    ● demo › should fail on first test run and succeed on subsequent run
+
+      expect(received).toBeUndefined()
+
+      Received: [Error: Random Flaky Error]
+
+        11 |       caughtError = error;
+        12 |     }
+      > 13 |     expect(caughtError).toBeUndefined();
+           |                         ^
+        14 |   });
+        15 | });
+        16 |
+
+        at Object.toBeUndefined (demo.unit.test.js:13:25)
+
+  Retrying test cases:  [ 'demo should fail on first test run and succeed on subsequent run' ]
+  PASS  ./demo.unit.test.js
+    demo
+      ✓ should fail on first test run and succeed on subsequent run (1 ms)
+
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        0.139 s, estimated 1 s
+  Ran all test suites with tests matching "demo should fail on first test run and succeed on subsequent run".
+  Test Suites: 1 failed, 1 total
+  Tests:       1 failed, 1 total
+  Snapshots:   0 total
+  Time:        0.521 s, estimated 1 s
+```
+
+Content of junit.xml output:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="0.52">
+  <testsuite name="demo" errors="0" failures="0" skipped="0" timestamp="9999-99-99T00:00:00" time="0.123" tests="1">
+    <testcase classname="demo should fail on first test run and succeed on subsequent run" name="demo should fail on first test run and succeed on subsequent run" time="0.001">
+    </testcase>
+  </testsuite>
+</testsuites>
+```
 
 # License
 
