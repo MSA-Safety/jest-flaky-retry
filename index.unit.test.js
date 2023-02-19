@@ -210,6 +210,7 @@ describe('jestFlakyRetryReporter', () => {
       existsSync.mockReturnValueOnce(true);
       renameSync.mockReturnValueOnce();
       instance.retryTestSuites = ['super/flaky.test.js'];
+      instance.options = {retryTimes: 2}
       instance.retryTestCases = [
         {
           fullName: 'flaky.test should be written better',
@@ -230,6 +231,7 @@ describe('jestFlakyRetryReporter', () => {
             testMatch: instance.retryTestSuites,
             testNamePattern: instance.retryTestCases[0].fullName,
             rootDir: instance.globalConfig.rootDir,
+            setupFilesAfterEnv: ['<rootDir>/setup-jest.js'],
           }),
         },
         [localPath],

@@ -3,7 +3,7 @@
 const myJest = require('jest');
 const jestJunit = require('jest-junit');
 const {
-  readFileSync, renameSync, existsSync, mkdirSync,
+  writeFileSync, readFileSync, renameSync, existsSync, mkdirSync, rmSync
 } = require('fs');
 const { isKnownToBeFlaky, mergeResults } = require('./helpers');
 
@@ -70,17 +70,32 @@ class JestFlakyRetryReporter {
    */
   async onRunComplete(contexts, results) {
     let finalResults = results;
+    let setupFilePath = `${this.globalConfig.rootDir}/setup-jest.js`;
 
     if (this.retryTestCases.length) {
       const retryFullNames = this.retryTestCases.map((test) => test.fullName);
       // eslint-disable-next-line no-console
       console.log('Retrying test cases: ', retryFullNames);
 
-      const jestConfig = {
+      let jestConfig = {
         testMatch: this.retryTestSuites,
         testNamePattern: retryFullNames.join('|'),
         rootDir: this.globalConfig.rootDir,
       };
+
+      if (this.options.retryTimes) {
+        // Set retry configuration
+        writeFileSync(
+          setupFilePath,
+          `jest.retryTimes(${this.options.retryTimes})`
+          );
+
+        jestConfig = {
+          ...jestConfig,
+          setupFilesAfterEnv: ['<rootDir>/setup-jest.js'],
+        };
+      }
+
       const { results: newResults } = await myJest.runCLI(
         {
           config: JSON.stringify(jestConfig),
@@ -98,6 +113,11 @@ class JestFlakyRetryReporter {
     // Note: Direct processor call of jest-junit is deprecated,
     // since testResultsProcessor support in jest is deprecated
     jestJunit(finalResults);
+
+    // Delete setup file.
+    if (this.options.retryTimes) {
+        rmSync(setupFilePath);
+    }
 
     const outputDir = this.options.junitOutputDirectory;
     if (!existsSync(outputDir)) {
