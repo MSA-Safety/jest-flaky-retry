@@ -27,4 +27,36 @@ function demo() {
   fs.rmSync(path);
 }
 
-module.exports = { demo };
+
+/**
+ * This demo function is to show retries behavior. It creates a first file and
+ * throws a first error, creates a second file and throws a second error.
+ * Succeeds if both files exist and deletes them.
+ *
+ * Ergo: first call fails - second call fails - third call succeeds.
+ *
+ * @throws {Error} If one of the files did not exist.
+ */
+function demoWithRetries() {
+  const firstFile = './demo-first-unit-text.txt';
+  const secondFile = './demo-second-unit-text.txt';
+
+  if (!fs.existsSync(firstFile)) {
+    // File does not exist yet, create file and throw error
+    fs.writeFileSync(firstFile, '0');
+    throw new Error('Random Flaky Error');
+  }
+
+  if (!fs.existsSync(secondFile)) {
+    // File does not exist yet, create file and throw error
+    fs.writeFileSync(secondFile, '0');
+    throw new Error('Random Flaky Error');
+  }
+
+  // Files exist, delete them.
+  fs.rmSync(firstFile);
+  fs.rmSync(secondFile);
+
+}
+
+module.exports = { demo, demoWithRetries };

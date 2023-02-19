@@ -23,10 +23,11 @@ module.exports = {
       {
         configFile: 'jest.unit.flakyRetry.json',
         junitOutputDirectory: 'build/results/unit',
+        retryTimes: 2,
       },
     ],
   ],
   roots: ['<rootDir>'],
   testEnvironment: 'node',
-  testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(unit.test).js?(x)', '!**/?(*.)+(retries.unit.test).js?(x)'],
+  testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(retries.unit.test).js?(x)'],
 };

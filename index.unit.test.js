@@ -307,5 +307,28 @@ describe('jestFlakyRetryReporter', () => {
       expect(stderr).toContain('1 failed, 1 total');
       expect(stderr).toContain('1 passed, 1 total');
     });
+
+    it('should return with an error but merged junit report and use retries', () => {
+      let caughtError;
+
+      try {
+        execSync('cd demo && npm run test:unit-retry');
+      } catch (error) {
+        caughtError = error;
+      }
+
+      expect(caughtError).toBeDefined();
+
+      const { status } = caughtError;
+      const stdout = caughtError.stdout.toString();
+      const stderr = caughtError.stderr.toString();
+
+      expect(status).toBe(1);
+      expect(stdout).toContain('Loading list of known flaky tests from jest.unit.flakyRetry.json');
+      expect(stdout).toContain('[ { failureMessages: [ \'Random Flaky Error\' ] } ]');
+      expect(stdout).toContain('demoWithRetries should fail on first and second test run and succeed on subsequent run');
+      expect(stderr).toContain('1 failed, 1 total');
+      expect(stderr).toContain('1 passed, 1 total');
+    });
   });
 });
