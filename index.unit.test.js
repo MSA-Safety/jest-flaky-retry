@@ -287,7 +287,7 @@ describe('jestFlakyRetryReporter', () => {
       let caughtError;
 
       try {
-        execSync('cd demo && npm run test:unit');
+        execSync('cd demo && npm run test');
       } catch (error) {
         caughtError = error;
       }
@@ -299,7 +299,7 @@ describe('jestFlakyRetryReporter', () => {
       const stderr = caughtError.stderr.toString();
 
       expect(status).toBe(1);
-      expect(stdout).toContain('Loading list of known flaky tests from jest.unit.flakyRetry.json');
+      expect(stdout).toContain('Loading list of known flaky tests from jest.flakyRetry.json');
       expect(stdout).toContain('[ { failureMessages: [ \'Random Flaky Error\' ] } ]');
       expect(stdout).toContain('Retrying test cases:  [ \'demo should fail on first test run and succeed on subsequent run\' ]');
       expect(stderr).toContain('1 failed, 1 total');

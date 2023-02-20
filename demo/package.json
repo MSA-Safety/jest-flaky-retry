@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Demo project using jest-flaky-retry",
   "scripts": {
-    "test:unit": "jest --config jest.unit.config.js"
+    "test": "jest"
   },
   "author": "Safety io - Cloud Platform Team",
   "license": "ISC",

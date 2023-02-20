@@ -98,12 +98,12 @@ appropriate usages might be e.g. network flakiness in integration and e2e tests.
 
 ```shell
 $ cd demo
-$ npm run test:unit # failure-free junit output; jest will return with exit code 1 nonetheless
+$ npm run test # failure-free junit output; jest will return with exit code 1 nonetheless
 
-  > jest-flaky-retry-demo@0.0.1 test:unit
-  > jest --config jest.unit.config.js
+  > jest-flaky-retry-demo@0.0.1 test
+  > jest --config jest.config.js
 
-  Determining test suites to run...Loading list of known flaky tests from jest.unit.flakyRetry.json
+  Determining test suites to run...Loading list of known flaky tests from jest.flakyRetry.json
   [ { failureMessages: [ 'Random Flaky Error' ] } ]
   FAIL  ./demo.unit.test.js
     demo
