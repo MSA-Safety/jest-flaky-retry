@@ -4,8 +4,9 @@
   "description": "Jest reporter that retries known flaky tests and produces junit results",
   "main": "index.js",
   "scripts": {
-    "test:unit": "jest --coverage --config jest.unit.config.js",
-    "lint": "eslint .",
+    "test": "jest",
+    "test:unit": "jest --ignoreProjects lint",
+    "test:lint": "jest --ignoreProjects test",
     "semantic-release": "semantic-release --branches main"
   },
   "author": "Safety io - Cloud Platform Team",
@@ -38,6 +39,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.1.7",
     "eslint-plugin-jsdoc": "^40.0.0",
+    "jest-runner-eslint": "^1.1.0",
     "semantic-release": "^20.1.0"
   }
 }
