@@ -36,7 +36,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: javascript
     - name: Use Node.js ${{ matrix.node-version }}
@@ -46,7 +46,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:javascript"
 
